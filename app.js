@@ -1,0 +1,7 @@
+const $=id=>document.getElementById(id);const log=[];const area=$("test");
+function safe(value){return String(value).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;");}
+function record(type,event){const item={type,key:event.key||event.data||"—",code:event.code||"—",location:event.location??"—",mods:["Shift","Ctrl","Alt","Meta"].filter((name)=>({Shift:event.shiftKey,Ctrl:event.ctrlKey,Alt:event.altKey,Meta:event.metaKey})[name]).join(" + ")||"—",repeat:Boolean(event.repeat),composing:Boolean(event.isComposing)};log.unshift(item);if(log.length>100)log.pop();render();}
+["keydown","keyup"].forEach(type=>area.addEventListener(type,event=>record(type,event)));
+["compositionstart","compositionupdate","compositionend"].forEach(type=>area.addEventListener(type,event=>record(type,event)));
+function render(){$("count").textContent=log.length+" event"+(log.length===1?"":"s");$("rows").innerHTML=log.length?log.map(x=>"<tr><td>"+safe(x.type)+"</td><td><code>"+safe(x.key)+"</code></td><td><code>"+safe(x.code)+"</code></td><td>"+safe(x.location)+"</td><td>"+safe(x.mods)+"</td><td>"+(x.repeat?"yes":"no")+"</td><td>"+(x.composing?"yes":"no")+"</td></tr>").join(""):'<tr><td colspan="7" class="empty">Focus the test area and press a key to begin.</td></tr>';}
+$("focus").addEventListener("click",()=>area.focus());$("clear").addEventListener("click",()=>{log.length=0;render();});render();

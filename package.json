@@ -1,0 +1,8 @@
+{
+  "name": "keyboard-event-inspector",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Local browser keyboard event inspector",
+  "scripts": { "start": "node server.js" },
+  "engines": { "node": ">=18" }
+}
